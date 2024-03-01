@@ -125,7 +125,7 @@ export default {
 
 	data() {
 		return {
-			isCentered: false,
+			isCenteredAndSpaced: false,
 		};
 	},
 
@@ -206,7 +206,7 @@ export default {
 			if (this.resolvedLetterSpacing !== 'inherit') {
 				styles.letterSpacing = this.resolvedLetterSpacing;
 			}
-			if (this.isCentered) {
+			if (this.isCenteredAndSpaced) {
 				styles.paddingLeft = styles.letterSpacing;
 			}
 			return styles;
@@ -214,11 +214,11 @@ export default {
 	},
 
 	mounted() {
-		this.detectAlignCenter();
+		this.detectAlignCenterAndLetterSpacing();
 	},
 
 	updated() {
-		this.detectAlignCenter();
+		this.detectAlignCenterAndLetterSpacing();
 	},
 
 	methods: {
@@ -229,16 +229,15 @@ export default {
 		 * Detect if the text is center aligned and add left padding
 		 * to balance out the letter spacing
 		 */
-		detectAlignCenter() {
-			console.log('detecting-align-center');
-			console.log('textAlign:', this.textAlign);
-			console.log('letterSpacing:', this.letterSpacing);
-			console.log('resolved text align:', this.resolvedTextAlign);
-			console.log('resolved letter spacing:', this.resolvedLetterSpacing);
+		detectAlignCenterAndLetterSpacing() {
+			if (!this.letterSpacing && !this.resolvedLetterSpacing) {
+				console.log('do not compute letter spacing');
+				return;
+			}
 
 			const computedStyle = window.getComputedStyle(this.$el);
 			const textAlign = computedStyle.getPropertyValue('text-align');
-			this.isCentered = textAlign === 'center';
+			this.isCenteredAndSpaced = textAlign === 'center';
 		},
 	},
 
