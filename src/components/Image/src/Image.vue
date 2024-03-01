@@ -262,21 +262,21 @@ export default {
 		// offsetHeight/offsetWidth which triggers a style recalculation. If you're
 		// scrolling a list that has images, it just causes the main thread to get frozen.
 		// Let's try and preload those values before the image is actually loaded.
-		// const timeoutValue = 100;
-		// const getImageDimensionsFn = () => {
-		// 	this.getImageDimensions();
-		// 	// Just to ensure we don't have an infinite loop
-		// 	this.getImageDimensionsFnAttemptsLeft -= 1;
-		// 	if (this.getImageDimensionsFnAttemptsLeft === 0) {
-		// 		return;
-		// 	}
-		// 	if (!this.height || !this.width) {
-		// 		this.getImageDimensionsTimeout = setTimeout(getImageDimensionsFn, timeoutValue);
-		// 	}
-		// };
-		// if (this.shouldGetImageDimensions) {
-		// 	this.$nextTick(getImageDimensionsFn);
-		// }
+		const timeoutValue = 100;
+		const getImageDimensionsFn = () => {
+			this.getImageDimensions();
+			// Just to ensure we don't have an infinite loop
+			this.getImageDimensionsFnAttemptsLeft -= 1;
+			if (this.getImageDimensionsFnAttemptsLeft === 0) {
+				return;
+			}
+			if (!this.height || !this.width) {
+				this.getImageDimensionsTimeout = setTimeout(getImageDimensionsFn, timeoutValue);
+			}
+		};
+		if (this.shouldGetImageDimensions) {
+			this.$nextTick(getImageDimensionsFn);
+		}
 	},
 
 	beforeDestroy() {
