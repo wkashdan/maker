@@ -233,8 +233,8 @@ export default {
 			console.log('detecting-align-center');
 			console.log('textAlign:', this.textAlign);
 			console.log('letterSpacing:', this.letterSpacing);
-			console.log('resolved text align: ', this.resolvedTextAlign);
-			console.log('resolved letter spacing: ', this.resolvedLetterSpacing);
+			console.log('resolved text align:', this.resolvedTextAlign);
+			console.log('resolved letter spacing:', this.resolvedLetterSpacing);
 
 			const computedStyle = window.getComputedStyle(this.$el);
 			const textAlign = computedStyle.getPropertyValue('text-align');
