@@ -174,7 +174,10 @@ export default {
 		return {
 			shouldLoad: false,
 			loaded: false,
-			throttledResizeHandler: throttle(this.getImageDimensions, THROTTLE_DELAY),
+			throttledResizeHandler: () => {
+				throttle(this.getImageDimensions, THROTTLE_DELAY);
+				console.log('throttle called');
+			},
 			height: 0,
 			width: 0,
 			getImageDimensionsFnAttemptsLeft: 20,
@@ -239,7 +242,9 @@ export default {
 		shape: {
 			immediate: true,
 			handler() {
+				console.log('props in watch: ', this.shouldGetImageDimensions, this.height, this.width);
 				if (this.shouldGetImageDimensions && (!this.height || !this.width)) {
+					console.log('about to call image dimensions from shape watcher');
 					this.$nextTick(() => this.getImageDimensions());
 				}
 			},
@@ -248,12 +253,10 @@ export default {
 
 	created() {
 		if (this.staticHeight) {
-			console.log('static height:', this.staticHeight);
 			this.height = this.staticHeight;
 		}
 
 		if (this.staticWidth) {
-			console.log('static width:', this.staticWidth);
 			this.width = this.staticWidth;
 		}
 	},
@@ -284,6 +287,7 @@ export default {
 		// Let's try and preload those values before the image is actually loaded.
 		const timeoutValue = 100;
 		const getImageDimensionsFn = () => {
+			console.log('calling image dimensions in timeout function');
 			this.getImageDimensions();
 			// Just to ensure we don't have an infinite loop
 			this.getImageDimensionsFnAttemptsLeft -= 1;
@@ -294,7 +298,10 @@ export default {
 				this.getImageDimensionsTimeout = setTimeout(getImageDimensionsFn, timeoutValue);
 			}
 		};
+
+		console.log('props in mounted:', this.shouldGetImageDimensions, this.height, this.width);
 		if (this.shouldGetImageDimensions && (!this.height || !this.width)) {
+			console.log('about to set the get image timeout in mounted');
 			this.$nextTick(getImageDimensionsFn);
 		}
 	},
@@ -322,9 +329,12 @@ export default {
 
 		onLoaded() {
 			this.loaded = true;
+
+			console.log('on loaded: ', this.shouldGetImageDimensions, this.height, this.width);
 			if (this.shouldGetImageDimensions && (!this.height || !this.width)) {
 				// We can't get the proper height of the image until after the DOM has been updated
 				// The image will otherwise be hidden, and the offsetHeight will be 0
+				console.log('about to call get image dimensions in on loaded');
 				this.$nextTick(() => this.getImageDimensions());
 			}
 		},
