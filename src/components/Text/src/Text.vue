@@ -1,4 +1,6 @@
 <script>
+/* eslint no-console: 0 */
+
 import { MThemeKey, defaultTheme, resolveThemeableProps } from '@square/maker/components/Theme';
 import cssValidator from '@square/maker/utils/css-validator';
 
@@ -228,6 +230,10 @@ export default {
 		 * to balance out the letter spacing
 		 */
 		detectAlignCenter() {
+			console.log('detecting-align-center');
+			console.log('textAlign:', this.textAlign);
+			console.log('letterSpacing:', this.letterSpacing);
+
 			const computedStyle = window.getComputedStyle(this.$el);
 			const textAlign = computedStyle.getPropertyValue('text-align');
 			this.isCentered = textAlign === 'center';
