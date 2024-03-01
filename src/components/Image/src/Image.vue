@@ -160,6 +160,14 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		staticHeight: {
+			type: Number,
+			default: 0,
+		},
+		staticWidth: {
+			type: Number,
+			default: 0,
+		}
 	},
 
 	data() {
@@ -238,6 +246,18 @@ export default {
 		},
 	},
 
+	created() {
+		if (this.staticHeight) {
+			console.log('static height:', this.staticHeight);
+			this.height = this.staticHeight;
+		}
+
+		if (this.staticWidth) {
+			console.log('static width:', this.staticWidth);
+			this.width = this.staticWidth;
+		}
+	},
+
 	mounted() {
 		// Emit image:visible right away if Image is cached,
 		// since it will just render instead of transitioning in
@@ -274,7 +294,7 @@ export default {
 				this.getImageDimensionsTimeout = setTimeout(getImageDimensionsFn, timeoutValue);
 			}
 		};
-		if (this.shouldGetImageDimensions) {
+		if (this.shouldGetImageDimensions && (!this.height || !this.width)) {
 			this.$nextTick(getImageDimensionsFn);
 		}
 	},
@@ -291,6 +311,7 @@ export default {
 		},
 
 		getImageDimensions() {
+			console.log('get image dimensions called');
 			this.height = this.$el?.offsetHeight || 0;
 			this.width = this.$el?.offsetWidth || 0;
 		},
